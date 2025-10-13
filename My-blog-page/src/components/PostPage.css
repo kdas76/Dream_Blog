@@ -1,0 +1,68 @@
+.post-page-container {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: var(--secondary-bg); /* Use theme variable */
+  border-radius: 8px;
+  box-shadow: 0 4px 12px var(--shadow-color);
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.dark .post-page-container {
+  background-color: var(--secondary-bg); /* Use theme variable */
+}
+
+.back-button {
+  margin-bottom: 1.5rem;
+}
+
+.post-page-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: var(--primary-text);
+}
+
+.dark .post-page-title {
+  color: var(--primary-text);
+}
+
+.post-page-meta {
+  font-size: 0.9rem;
+  color: var(--secondary-text);
+  margin-bottom: 1.5rem;
+}
+
+.dark .post-page-meta {
+  color: var(--secondary-text);
+}
+
+.post-page-image {
+  width: 100%;
+  max-height: 450px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+
+.post-page-content {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--primary-text);
+  white-space: pre-wrap; /* This preserves line breaks in the description */
+}
+
+.dark .post-page-content {
+  color: var(--primary-text);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

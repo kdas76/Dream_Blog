@@ -1,7 +1,4 @@
-// server/models/postModel.js
-// Handles all post-related database queries
-
-const db = require('../db');
+const db = require('../config/db');
 
 // 🧩 CREATE new post
 async function createPost({ title, description, image_url, user_id }) {

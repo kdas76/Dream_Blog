@@ -1,7 +1,7 @@
 // server/models/userModel.js
 // DB helper for users. Uses parameterized queries to avoid SQL injection.
 
-const db = require('../db'); // expects db.query(sql, params)
+const db = require('../config/db'); // expects db.query(sql, params)
 const { BCRYPT_SALT_ROUNDS } = process.env;
 
 async function createUser({ name, email, hashedPassword }) {

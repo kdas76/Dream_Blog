@@ -15,7 +15,7 @@ export default function Signup() {
     setMessage("");
 
     try {
-      const res = await axios.post("/signup", { name, email, password });
+      const res = await axios.post("/auth/signup", { name, email, password });
       setMessage("Account created successfully! You can now log in.");
       setName("");
       setEmail("");
