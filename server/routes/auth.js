@@ -1,6 +1,3 @@
-// server/routes/auth.js
-// Signup and Login routes
-
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
@@ -74,3 +71,4 @@ router.post('/login', async (req, res) => {
 });
 
 module.exports = router;
+
