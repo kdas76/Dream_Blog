@@ -342,7 +342,7 @@ export default function App() {
       setFilter("all");
       localStorage.setItem("postFilter", "all");
     }
-  }, [user]);
+  }, [user, filter]);
 
   // === Fetch Posts ===
   const fetchPosts = async () => {
@@ -353,8 +353,7 @@ export default function App() {
       if (filter === "mine" && user) {
         params.user_id = user.id;
       }
-
-      const res = await axios.get("/posts", { params });
+      const res = await axios.get("/posts", { params }); // This now works with the backend change
 
       const data = (res.data.posts || []).map((p) => ({
         id: p.id,
@@ -378,13 +377,14 @@ export default function App() {
 
   useEffect(() => {
     fetchPosts();
-  }, [page, query, filter]);
+  }, [page, query, filter, user]); // ✅ Also re-fetch if user logs in/out
 
   // === Delete Post ===
   const handleDelete = async (postId) => {
     if (!user) return alert("You must be logged in to delete posts.");
     if (window.confirm("Are you sure you want to delete this post?")) {
       try {
+        //await axios.delete(`/api/posts/${postId}`);
         await axios.delete(`/posts/${postId}`);
         fetchPosts();
       } catch (err) {
@@ -512,11 +512,12 @@ export default function App() {
           className={`btn me-2 ${
             filter === "all" ? "btn-primary" : "btn-outline-primary"
           }`}
-          onClick={() => {
-            setFilter("all");
-            localStorage.setItem("postFilter", "all");
-            setPage(1);
-            fetchPosts();
+          onClick={() => { // Simplified onClick
+            if (filter !== "all") {
+              setFilter("all");
+              localStorage.setItem("postFilter", "all");
+              setPage(1); // Reset to first page on filter change
+            }
           }}
         >
           All
@@ -525,12 +526,13 @@ export default function App() {
           className={`btn ${
             filter === "mine" ? "btn-primary" : "btn-outline-primary"
           }`}
-          onClick={() => {
+          onClick={() => { // Simplified onClick
             if (!user) return alert("Please login to view your posts.");
-            setFilter("mine");
-            localStorage.setItem("postFilter", "mine");
-            setPage(1);
-            fetchPosts();
+            if (filter !== "mine") {
+              setFilter("mine");
+              localStorage.setItem("postFilter", "mine");
+              setPage(1); // Reset to first page on filter change
+            }
           }}
         >
           Mine
