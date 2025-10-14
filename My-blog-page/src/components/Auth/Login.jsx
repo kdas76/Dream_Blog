@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import axios from "../../utils/axiosInstance";
 import "./Auth.css";
 
@@ -6,7 +7,8 @@ export default function Login({ onLoginSuccess }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false); // ❗ Add loading state
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -29,12 +31,13 @@ export default function Login({ onLoginSuccess }) {
       localStorage.setItem("user", JSON.stringify(user));
 
       // ✅ Notify parent (App.jsx)
-      if (onLoginSuccess) onLoginSuccess(user);
+      onLoginSuccess(user);
+      navigate("/"); // Redirect to home on success
     } catch (err) {
       console.error("❌ Login error:", err);
       setError(err.response?.data?.error || "Login failed. Please try again.");
     } finally {
-      setLoading(false);
+      setLoading(false); // ❗ Stop loading on success or error
     }
   };
 
@@ -63,6 +66,9 @@ export default function Login({ onLoginSuccess }) {
           {loading ? "Logging in..." : "Login"}
         </button>
       </form>
+      <p className="auth-switch">
+        Don't have an account? <Link to="/signup">Sign Up</Link>
+      </p>
     </div>
   );
 }

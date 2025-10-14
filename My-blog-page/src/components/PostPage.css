@@ -2,18 +2,19 @@
   max-width: 900px;
   margin: 2rem auto;
   padding: 2rem;
-  background-color: var(--secondary-bg); /* Use theme variable */
+  background-color: var(--secondary-bg);
   border-radius: 8px;
   box-shadow: 0 4px 12px var(--shadow-color);
   animation: fadeIn 0.5s ease-in-out;
 }
 
 .dark .post-page-container {
-  background-color: var(--secondary-bg); /* Use theme variable */
+  background-color: var(--secondary-bg);
 }
 
 .back-button {
   margin-bottom: 1.5rem;
+  font-size: 1rem;
 }
 
 .post-page-title {
@@ -21,6 +22,7 @@
   font-weight: bold;
   margin-bottom: 0.5rem;
   color: var(--primary-text);
+  line-height: 1.2;
 }
 
 .dark .post-page-title {
@@ -49,11 +51,74 @@
   font-size: 1.1rem;
   line-height: 1.8;
   color: var(--primary-text);
-  white-space: pre-wrap; /* This preserves line breaks in the description */
+  white-space: pre-wrap;
 }
 
 .dark .post-page-content {
   color: var(--primary-text);
+}
+
+/* =========================
+   📱 RESPONSIVE DESIGN
+========================= */
+
+/* Tablet (768px and below) */
+@media (max-width: 768px) {
+  .post-page-container {
+    margin: 1.5rem;
+    padding: 1.5rem;
+  }
+
+  .post-page-title {
+    font-size: 2rem;
+  }
+
+  .post-page-meta {
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+  }
+
+  .post-page-image {
+    max-height: 350px;
+    margin-bottom: 1.5rem;
+  }
+
+  .post-page-content {
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+}
+
+/* Mobile (480px and below) */
+@media (max-width: 480px) {
+  .post-page-container {
+    margin: 1rem;
+    padding: 1rem;
+    border-radius: 6px;
+  }
+
+  .post-page-title {
+    font-size: 1.6rem;
+  }
+
+  .back-button {
+    font-size: 0.9rem;
+  }
+
+  .post-page-meta {
+    font-size: 0.8rem;
+  }
+
+  .post-page-image {
+    max-height: 250px;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+  }
+
+  .post-page-content {
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
 }
 
 @keyframes fadeIn {
