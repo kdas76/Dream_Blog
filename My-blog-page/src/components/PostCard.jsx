@@ -1,16 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "./PostCard.css";
 
-export default function PostCard({
-  photo,
-  view,
-  onEdit,
-  onDelete,
-  authorName,
-  editable,
-}) {
-  const isListView = view === "list";
+export default function PostCard({ photo, view, dark, onEdit, onDelete, authorName, editable }) {
   const DESCRIPTION_LIMIT = 100;
 
   const truncatedDesc =
@@ -18,56 +9,77 @@ export default function PostCard({
       ? `${photo.desc.substring(0, DESCRIPTION_LIMIT)}...`
       : photo.desc;
 
+  // Card view specific classes
+  const viewClasses = {
+    grid: "flex-col h-full",
+    list: "flex-col md:flex-row md:h-48", // Set a fixed height for list view on medium screens and up
+  };
+
+  const imageContainerClasses = {
+    grid: "h-50", // Reduced height for better balance
+    list: "h-48 md:h-full md:w-72 md:flex-shrink-0", // Set initial height for mobile, and full height for md screens
+  };
+
   return (
-    <div className={`card post-card ${isListView ? "list-view" : ""}`}>
-      <img
-        src={photo.img}
-        className="card-img-top"
-        alt={photo.title}
-        loading="lazy"
-      />
+    <div
+      className={`group relative flex w-full flex-col overflow-hidden rounded-xl border shadow-sm transition-all duration-300 hover:shadow-lg ${dark ? "border-slate-700 bg-slate-800" : "border-slate-200 bg-white"} ${viewClasses[view]}`}
+    >
+      {/* Image */}
+      <div className={`relative overflow-hidden ${imageContainerClasses[view]}`}>
+        <img
+          src={photo.img}
+          alt={photo.title}
+          className="h-full w-full object-cover transition-transform duration-300 ease-in-out group-hover:scale-105"
+          loading="lazy"
+        />
+      </div>
 
-      <div className="card-body">
-        <h5 className="card-title">{photo.title}</h5>
+      {/* Card Body */}
+      <div className="flex flex-grow flex-col p-4">
+        <h5 className="mb-2 text-lg font-bold tracking-tight text-slate-800 dark:text-slate-100">
+          {photo.title}
+        </h5>
 
-        <div className="card-text-wrapper">
-          <p className="card-text">
+        <div className="flex-grow">
+          <p className="mb-4 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
             {truncatedDesc}
-            {" "}
             <Link
-              to={`/post/${photo.id}`} // This is correct
-              className="btn btn-link p-0 read-more-btn"
+              to={`/post/${photo.id}`}
+              className="ml-1 inline-block text-sm font-semibold text-blue-600 no-underline hover:underline dark:text-blue-400"
             >
               Read More
             </Link>
           </p>
         </div>
 
-        <div className="d-flex justify-content-between align-items-center">
-          <div className="author-info">
-            <small className="text-muted">
+        {/* Author + Actions */}
+        <div className="mt-auto flex items-center justify-between pt-2">
+          <div>
+            <small className="text-xs text-slate-500 dark:text-slate-400">
               By{" "}
-              <span className="author-name">
+              <span className="font-semibold text-slate-700 dark:text-slate-200">
                 {authorName || "Unknown"}
               </span>
             </small>
           </div>
 
           {editable && (
-            <div className="card-actions">
+            <div className="flex items-center gap-4">
               <button
                 onClick={() => onEdit(photo)}
-                className="icon-btn edit-btn"
+                className="text-slate-500 transition-colors hover:text-blue-600 dark:hover:text-blue-400"
+                data-bs-toggle="tooltip"
                 title="Edit"
               >
-                ✏️
+                <i className="bi bi-pencil-fill"></i>
               </button>
               <button
                 onClick={() => onDelete(photo.id)}
-                className="icon-btn delete-btn"
+                className="text-slate-500 transition-colors hover:text-red-600 dark:hover:text-red-500"
+                data-bs-toggle="tooltip"
                 title="Delete"
               >
-                🗑️
+                <i className="bi bi-trash-fill"></i>
               </button>
             </div>
           )}
