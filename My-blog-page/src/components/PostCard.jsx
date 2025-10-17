@@ -1,8 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useTheme } from "../ThemeContext";
 
-export default function PostCard({ photo, view, dark, onEdit, onDelete, authorName, editable }) {
+export default function PostCard({ photo, view, onEdit, onDelete, authorName, user }) {
   const DESCRIPTION_LIMIT = 100;
+  const { dark } = useTheme();
 
   const truncatedDesc =
     photo.desc && photo.desc.length > DESCRIPTION_LIMIT
@@ -63,20 +65,20 @@ export default function PostCard({ photo, view, dark, onEdit, onDelete, authorNa
             </small>
           </div>
 
-          {editable && (
+          {user && (photo.user_id === user.id || user.role === "admin") && (
             <div className="flex items-center gap-4">
-              <button
-                onClick={() => onEdit(photo)}
-                className="text-slate-500 transition-colors hover:text-blue-600 dark:hover:text-blue-400"
-                data-bs-toggle="tooltip"
-                title="Edit"
-              >
-                <i className="bi bi-pencil-fill"></i>
-              </button>
+              {user.id === photo.user_id && (
+                <button
+                  onClick={() => onEdit(photo)}
+                  className="text-slate-500 transition-colors hover:text-blue-600 dark:hover:text-blue-400"
+                  title="Edit"
+                >
+                  <i className="bi bi-pencil-fill"></i>
+                </button>
+              )}
               <button
                 onClick={() => onDelete(photo.id)}
                 className="text-slate-500 transition-colors hover:text-red-600 dark:hover:text-red-500"
-                data-bs-toggle="tooltip"
                 title="Delete"
               >
                 <i className="bi bi-trash-fill"></i>

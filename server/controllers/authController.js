@@ -112,7 +112,7 @@ exports.verifyOtp = async (req, res) => {
     await verifyUserEmail(otp);
 
     const token = jwt.sign(
-      { id: user.id, name: user.name, email: user.email },
+      { id: user.id, name: user.name, email: user.email, role: user.role },
       JWT_SECRET,
       { expiresIn: JWT_EXPIRES_IN }
     );
@@ -120,7 +120,7 @@ exports.verifyOtp = async (req, res) => {
     return res.status(200).json({
       message: "Account verified and logged in successfully!",
       token,
-      user: { id: user.id, name: user.name, email: user.email },
+      user: { id: user.id, name: user.name, email: user.email, role: user.role },
     });
   } catch (err) {
     console.error("OTP Verify error:", err.message);
@@ -149,7 +149,7 @@ exports.login = async (req, res) => {
       return res.status(401).json({ error: "Invalid email or password." });
 
     const token = jwt.sign(
-      { id: user.id, name: user.name, email: user.email },
+      { id: user.id, name: user.name, email: user.email, role: user.role },
       JWT_SECRET,
       { expiresIn: JWT_EXPIRES_IN }
     );
@@ -157,7 +157,7 @@ exports.login = async (req, res) => {
     return res.status(200).json({
       message: "Login successful",
       token,
-      user: { id: user.id, name: user.name, email: user.email },
+      user: { id: user.id, name: user.name, email: user.email, role: user.role },
     });
   } catch (err) {
     console.error("Login error:", err.message);

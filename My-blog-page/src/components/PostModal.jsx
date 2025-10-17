@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "../utils/axiosInstance";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import { useTheme } from "../ThemeContext";
 
 export default function PostModal({ mode = "create", post = null, isOpen, onClose, onSubmit }) {
   const [file, setFile] = useState(null);
@@ -9,6 +10,7 @@ export default function PostModal({ mode = "create", post = null, isOpen, onClos
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [loading, setLoading] = useState(false);
+  const { dark } = useTheme();
 
   // Initialize values when editing
   useEffect(() => {
@@ -76,8 +78,9 @@ export default function PostModal({ mode = "create", post = null, isOpen, onClos
       }}
     >
       <div
-        //className="relative w-full max-w-2xl bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-2xl border border-gray-200 dark:border-slate-700 animate-slideUp"
-        className="relative w-[90%] max-w-lg bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-2xl border border-gray-200 dark:border-slate-700 animate-slideUp"
+        className={`relative w-[90%] max-w-lg rounded-2xl p-6 shadow-2xl border animate-slideUp ${
+          dark ? "bg-slate-800 border-slate-700" : "bg-white border-gray-200"
+        }`}
         onClick={(e) => e.stopPropagation()} // Prevent modal from closing when clicking inside
       >
         {/* Title */}

@@ -10,11 +10,17 @@ const pool = new Pool({
   port: process.env.PG_PORT,
 });
 
-pool
-  .connect()
-  .then(() => console.log("✅ Connected to PostgreSQL"))
-  .catch((err) => console.error("❌ PostgreSQL connection error:", err.message));
-
 module.exports = {
-  query: (text, params) => pool.query(text, params),
+  query: async (text, params) => {
+    try {
+      const client = await pool.connect();
+      const result = await client.query(text, params);
+      client.release();
+      return result;
+    } catch (err) {
+      console.error("❌ Database query error:", err.message);
+      // Re-throw the error to be caught by the controller
+      throw err;
+    }
+  },
 };

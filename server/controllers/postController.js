@@ -10,14 +10,13 @@ const {
 } = require("../models/postModel");
 
 exports.getAll = async (req, res) => {
-  const { page = 1, limit = 9, query = "", user_id } = req.query;
+  const { page = 1, limit = 9, query = "", user_id, exclude_user_id } = req.query;
   const offset = (page - 1) * limit;
 
   try {
-    const { posts, totalPosts } = await getAllPosts({ limit, offset, query });
-    const filtered = user_id ? posts.filter(p => p.user_id == user_id) : posts;
-    const totalPages = Math.ceil(totalPosts / limit);
-    res.json({ posts: filtered, totalPages });
+    const { posts, totalPosts } = await getAllPosts({ limit, offset, query, user_id, exclude_user_id });
+    const totalPages = Math.ceil(totalPosts / limit); // Use the count from the model
+    res.json({ posts, totalPages });
   } catch (err) {
     console.error("GET /posts error:", err.message);
     res.status(500).json({ error: "Database error" });
@@ -99,11 +98,17 @@ exports.remove = async (req, res) => {
     const post = await getPostById(id);
 
     if (!post) return res.status(404).json({ error: "Not found" });
-    if (post.user_id !== req.user.id)
+    if (post.user_id !== req.user.id && req.user.role !== 'admin')
       return res.status(403).json({ error: "Unauthorized" });
 
-    await deletePost(id, req.user.id);
-    if (post.image_url) {
+    const deletedPost = await deletePost(id, req.user.id, req.user.role);
+
+    if (!deletedPost) {
+      return res.status(404).json({ error: "Post not found or you don't have permission to delete it." });
+    }
+
+    // Unlink the image file if it exists
+    if (deletedPost.image_url) {
       const imgPath = path.join(__dirname, "..", post.image_url);
       fs.unlink(imgPath, () => {});
     }
